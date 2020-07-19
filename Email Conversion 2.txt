@@ -1,0 +1,38 @@
+import win32com.client
+import os
+import openpyxl
+
+# Call a Workbook() function of openpyxl 
+# to create a new blank Workbook object 
+wb = openpyxl.Workbook() 
+
+# Get workbook active sheet 
+# from the active attribute 
+sheet = wb.active 
+
+# Cell objects also have row, column 
+# and coordinate attributes that provide 
+# location information for the cell. 
+
+# Note: The first row or column integer 
+# is 1, not 0. Cell object is created by 
+# using sheet object's cell() method. 
+c1 = sheet.cell(row = 1, column = 1) 
+
+
+outlook=win32com.client.Dispatch("Outlook.Application").GetNameSpace("MAPI")
+inbox=outlook.GetDefaultFolder(6) #Inbox default index value is 6
+message=inbox.Items
+message2=message.GetLast()
+subject=message2.Subject
+body=message2.body
+date=message2.senton.date()
+sender=message2.Sender
+attachments=message2.Attachments
+for m in message:
+    if m.Subject=="Sample Change Log ":# here in my requirement i will change the dates
+        print(m.body)
+        # writing values to cells 
+        c1.value = m.body
+
+wb.save("D:\\demo.xlsx")
